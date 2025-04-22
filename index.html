@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>森のノベルゲーム</title>
+    <style>
+        body { background-color: black; color: white; text-align: center; margin: 0; padding: 0; font-family: sans-serif; }
+        #game { padding: 20px; }
+        img { width: 100%; max-height: 80vh; object-fit: cover; }
+        button { margin: 10px; padding: 10px 20px; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <div id="game">
+        <img id="bg" src="images/forest.jpg" alt="背景画像">
+        <h1 id="text">あなたは森に迷い込みました。</h1>
+        <div id="choices"></div>
+    </div>
+    <audio id="bgm" src="sounds/bgm_forest.mp3" loop autoplay></audio>
+    <script>
+        const scenarios = {
+            start: {
+                text: "あなたは森に迷い込みました。どうしますか？",
+                choices: [
+                    { text: "森を歩く", next: "walk" },
+                    { text: "その場にとどまる", next: "stay" }
+                ]
+            },
+            walk: {
+                text: "あなたは森を歩き続け、無事に脱出できました！",
+                choices: []
+            },
+            stay: {
+                text: "あなたはその場にとどまり、森の動物たちに囲まれました。",
+                choices: []
+            }
+        };
+
+        const textEl = document.getElementById("text");
+        const choicesEl = document.getElementById("choices");
+
+        function showScenario(key) {
+            const scene = scenarios[key];
+            textEl.textContent = scene.text;
+            choicesEl.innerHTML = "";
+            scene.choices.forEach(choice => {
+                const btn = document.createElement("button");
+                btn.textContent = choice.text;
+                btn.onclick = () => showScenario(choice.next);
+                choicesEl.appendChild(btn);
+            });
+        }
+
+        showScenario("start");
+    </script>
+</body>
+</html>
